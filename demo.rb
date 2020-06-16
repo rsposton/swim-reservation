@@ -102,6 +102,15 @@ puts "Test Passed: Press date (#{day_number}) on schedule" if select_day.display
 
 select_day.click
 
+sleep 2
+
+select_time = wait.until {
+    element = driver.find_element(:xpath, "//div[@data-hourindex='0']")
+    element if element.displayed?
+}
+puts "Test Passed: Hour selected" if select_time.displayed?
+
+select_time.click
 
 
 puts "End Success" if wait.until {
