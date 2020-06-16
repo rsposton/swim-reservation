@@ -105,7 +105,7 @@ select_day.click
 sleep 2
 
 select_time = wait.until {
-    element = driver.find_element(:xpath, "//div[@data-hourindex='0']")
+    element = driver.find_element(:xpath, "//div[@data-hourindex='1'][@data-slotindex='0']")
     element if element.displayed?
 }
 puts "Test Passed: Hour selected" if select_time.displayed?
