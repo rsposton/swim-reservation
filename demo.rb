@@ -33,7 +33,7 @@ button = wait.until {
     element = driver.find_element(:css, "button[class='btn btn-light-blue mt-1 text-uppercase w-100 btn-big font-weight-bold letter-spacing-1']")
     element if element.displayed?
 }
-puts "Test Passed: Form input found" if button.displayed?
+puts "Test Passed: Login button found" if button.displayed?
 
 button.click
 
@@ -41,9 +41,67 @@ schedule_button = wait.until {
     element = driver.find_element(:css, "button[class='btn white darker-blue-bg float-right mr-2']")
     element if element.displayed?
 }
-puts "Test Passed: Form input found" if schedule_button.displayed?
+puts "Test Passed: Schedule button found" if schedule_button.displayed?
 
 schedule_button.click
+
+select_location_radio = wait.until {
+    element = driver.find_element(:xpath, "//span[text()='Bay Club Redwood Shores']")
+    element if element.displayed?
+}
+puts "Test Passed: Select location found" if select_location_radio.displayed?
+
+select_location_radio.click
+
+continue_schedule_button = wait.until {
+    element = driver.find_element(:css, "div[class='btn btn-light-blue w-100']")
+    element if element.displayed?
+}
+puts "Test Passed: Continue Schedule button found" if continue_schedule_button.displayed?
+
+continue_schedule_button.click
+
+select_lap_pool = wait.until {
+    element = driver.find_element(:xpath, "//*[text()='Adult Lap Pool']")
+    element if element.displayed?
+}
+puts "Test Passed: Select Lap Pool" if select_lap_pool.displayed?
+
+select_lap_pool.click
+
+next_button = wait.until {
+    element = driver.find_element(:css, "div[class='col-auto slider-item clickable pr-3']")
+    element if element.displayed?
+}
+puts "Test Passed: Next button ('>') on schedule" if next_button.displayed?
+
+next_button.click
+
+select_kathleen = wait.until {
+    element = driver.find_element(:css, "div[class='person-select-item mr-3 mb-3 d-flex flex-column align-items-center clickable avatar-small ng-star-inserted']")
+    element if element.displayed?
+}
+puts "Test Passed: Select Kathleen" if select_kathleen.displayed?
+
+select_regan = wait.until {
+    element = driver.find_element(:css, "div[class='person-select-item mr-3 mb-3 d-flex flex-column align-items-center clickable avatar-small ng-star-inserted selected']")
+    element if element.displayed?
+}
+puts "Test Passed: Deselect Regan" if select_regan.displayed?
+
+select_kathleen.click
+select_regan.click
+
+day_number = (Time.now+(60*60*24*7)).day
+
+select_day = wait.until {
+    element = driver.find_element(:xpath, "//*[text()='#{day_number}']")
+    element if element.displayed?
+}
+puts "Test Passed: Press date (#{day_number}) on schedule" if select_day.displayed?
+
+select_day.click
+
 
 
 puts "End Success" if wait.until {
