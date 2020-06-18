@@ -62,8 +62,8 @@ puts "Test Passed: Continue Schedule button found" if continue_schedule_button.d
 continue_schedule_button.click
 
 select_lap_pool = wait.until {
-    #element = driver.find_element(:xpath, "//*[text()='Adult Lap Pool']")
-    element = driver.find_element(:xpath, "//*[text()='Recreation/Lap Pool']")
+    element = driver.find_element(:xpath, "//*[text()='Adult Lap Pool']")
+    #element = driver.find_element(:xpath, "//*[text()='Recreation/Lap Pool']")
     element if element.displayed?
 }
 puts "Test Passed: Select Lap Pool" if select_lap_pool.displayed?
@@ -103,10 +103,25 @@ puts "Test Passed: Press date (#{day_number}) on schedule" if select_day.display
 
 select_day.click
 
-sleep 1
+sleep 2
+
+
+if (driver.find_element(:xpath, "//*[text()=' You can book only 7 days in advance ']") rescue false)
+    day_number = (Time.now+(60*60*24*6)).day
+
+    select_day = wait.until {
+        element = driver.find_element(:xpath, "//*[text()='#{day_number}']")
+        element if element.displayed?
+    }
+    puts "Test Passed: Press date (#{day_number}) on schedule" if select_day.displayed?
+
+    select_day.click    
+end
+
+
 
 select_end_time = wait.until {
-    element = driver.find_element(:css, ".hour-item [data-hourindex='0'][data-slotindex='1']")
+    element = driver.find_element(:css, ".hour-item [data-hourindex='1'][data-slotindex='0']")
     element if element.displayed?
 }
 puts "Test Passed: Hour selected" if select_end_time.displayed?
@@ -115,36 +130,38 @@ select_end_time.click
 puts "click 1"
 sleep 1
 
-select_end_time_again = wait.until {
-    element = driver.find_element(:css, "div[class='row no-gutters mt-2']")
+period_time_end = wait.until {
+    element = driver.find_element(:xpath, "(//app-time-range//span)[2]")
     element if element.displayed?
 }
-puts "Test Passed: Hour selected" if select_end_time_again.displayed?
-
-select_end_time_again.click
-puts "click 2"
-sleep 1
+puts "Test Passed: Time end selected" if period_time_end.displayed?
+period_time_end.click
 
 select_expand_time = wait.until {
-    element = driver.find_element(:css, ".selection-start-border")
+    element = driver.find_element(:xpath, "//*[@class='popover-content popover-body']//*[@class='row no-gutters text-center']//*[@class='col mx-2']")
     element if element.displayed?
 }
-puts "Test Passed: Hour selected" if select_expand_time.displayed?
-
-puts "click 3"
+puts "Test Passed: Plus 30 mins selected" if select_expand_time.displayed?
+select_expand_time.click
+select_expand_time.click
 select_expand_time.click
 sleep 1
 
-puts "click 4"
-select_end_time_again.click
-sleep 1
+# click on time period to close modal
+period_time_end.click
 
-puts "click 5"
-select_expand_time.click
-sleep 1
+confirm_button = wait.until {
+    element = driver.find_element(:css, "button[class='btn btn-info text-uppercase w-100 py-2 px-8']")
+    element if element.displayed?
+}
+puts "Test Passed: Confirm button found" if confirm_button.displayed?
+
+confirm_button.click
+
+sleep 5
 
 puts "End Success" if wait.until {
-    /Bay Club Connect Stuff/.match(driver.page_source)
+    /Bay Club Connect/.match(driver.page_source)
 }
 
 # Drop browser object
